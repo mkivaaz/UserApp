@@ -67,7 +67,7 @@ public class RequestsActivity extends AppCompatActivity {
             public void onClick(View view) {
                 RequestList request = new RequestList(nameEt.getText().toString(), descEt.getText().toString(), mAuth.getCurrentUser().getEmail(),false,"None");
 
-                String uploadID = myRef.push().getKey();
+                String uploadID = request.getReqName().replace(" ","")+ "_" + request.getReqEmail().replace(".","");
                 myRef.child(uploadID).setValue(request).addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
