@@ -8,14 +8,18 @@ public class RequestList {
     private String reqName;
     private String reqDesc;
     private String reqEmail;
+    private Boolean reqAccepted;
+    private String acceptedBy;
 
     public RequestList() {
     }
 
-    public RequestList(String reqName, String reqDesc, String reqEmail) {
+    public RequestList(String reqName, String reqDesc, String reqEmail, Boolean reqAccepted, String acceptedBy) {
         this.reqName = reqName;
         this.reqDesc = reqDesc;
         this.reqEmail = reqEmail;
+        this.reqAccepted = reqAccepted;
+        this.acceptedBy = acceptedBy;
     }
 
     public String getReqName() {
@@ -40,5 +44,21 @@ public class RequestList {
 
     public void setReqEmail(String reqEmail) {
         this.reqEmail = reqEmail;
+    }
+
+    public Boolean getReqAccepted() {
+        return reqAccepted;
+    }
+
+    public void setReqAccepted(Boolean reqAccepted) {
+        this.reqAccepted = reqAccepted;
+    }
+
+    public String getAcceptedBy() {
+        return acceptedBy;
+    }
+
+    public void setAcceptedBy(String acceptedBy) {
+        this.acceptedBy = acceptedBy;
     }
 }

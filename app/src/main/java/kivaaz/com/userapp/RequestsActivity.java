@@ -65,7 +65,7 @@ public class RequestsActivity extends AppCompatActivity {
         addBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                RequestList request = new RequestList(nameEt.getText().toString(), descEt.getText().toString(), mAuth.getCurrentUser().getEmail());
+                RequestList request = new RequestList(nameEt.getText().toString(), descEt.getText().toString(), mAuth.getCurrentUser().getEmail(),false,"None");
 
                 String uploadID = myRef.push().getKey();
                 myRef.child(uploadID).setValue(request).addOnSuccessListener(new OnSuccessListener<Void>() {
@@ -90,8 +90,9 @@ public class RequestsActivity extends AppCompatActivity {
                 reqList = new ArrayList<>();
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()){
                     RequestList req = snapshot.getValue(RequestList.class);
-
-                    reqList.add(req);
+                    if(req.getReqEmail().equals(mAuth.getCurrentUser().getEmail())){
+                        reqList.add(req);
+                    }
                 }
                 SetContents(reqList,req_recycle);
             }

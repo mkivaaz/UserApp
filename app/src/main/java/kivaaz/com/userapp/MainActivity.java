@@ -11,16 +11,26 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 public class MainActivity extends AppCompatActivity {
 
     private static final String TAG = ".MainActivity";
     private FirebaseAuth mAuth;
     private FirebaseAuth.AuthStateListener mAuthListener;
+    FirebaseDatabase database;
+    DatabaseReference myRef;
+
+    private final String USER_REFERNCE = "Users";
 
     EditText emailET;
     EditText passwordET;
@@ -33,7 +43,8 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         mAuth = FirebaseAuth.getInstance();
-
+        database = FirebaseDatabase.getInstance();
+        myRef = database.getReference(USER_REFERNCE);
         AuthChecker();
 
         emailET = (EditText) findViewById(R.id.emailET);
@@ -56,10 +67,20 @@ public class MainActivity extends AppCompatActivity {
                                     Exception e = task.getException();
                                     Toast.makeText(MainActivity.this, e.getMessage(),Toast.LENGTH_SHORT).show();
                                 }else {
-                                    Toast.makeText(MainActivity.this,"User Registereed",Toast.LENGTH_SHORT).show();
-                                    logoutBtn.setVisibility(View.VISIBLE);
-                                    loginBtn.setVisibility(View.GONE);
-                                    signupBtn.setVisibility(View.GONE);
+                                    String uid = task.getResult().getUser().getUid();
+                                    String curr_email = task.getResult().getUser().getEmail();
+                                    UserType userType = new UserType(curr_email,"User");
+                                    myRef.child(uid).setValue(userType).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                        @Override
+                                        public void onSuccess(Void aVoid) {
+                                            Toast.makeText(MainActivity.this,"User Registereed",Toast.LENGTH_SHORT).show();
+                                            logoutBtn.setVisibility(View.VISIBLE);
+                                            loginBtn.setVisibility(View.GONE);
+                                            signupBtn.setVisibility(View.GONE);
+                                            startActivity(new Intent(getBaseContext(),RequestsActivity.class));
+                                        }
+                                    });
+
                                 }
                             }
                         });
@@ -79,11 +100,27 @@ public class MainActivity extends AppCompatActivity {
                                     Exception e = task.getException();
                                     Toast.makeText(MainActivity.this,e.getMessage(),Toast.LENGTH_SHORT).show();
                                 }else {
-                                    Toast.makeText(MainActivity.this,"User Logged in",Toast.LENGTH_SHORT).show();
-                                    logoutBtn.setVisibility(View.VISIBLE);
-                                    loginBtn.setVisibility(View.GONE);
-                                    signupBtn.setVisibility(View.GONE);
-                                    startActivity(new Intent(getBaseContext(),RequestsActivity.class));
+                                    String uid = task.getResult().getUser().getUid();
+                                    myRef.child(uid).child("role").addValueEventListener(new ValueEventListener() {
+                                        @Override
+                                        public void onDataChange(DataSnapshot dataSnapshot) {
+                                            if(dataSnapshot.getValue().equals("User")){
+                                                Toast.makeText(MainActivity.this,"User Logged in",Toast.LENGTH_SHORT).show();
+                                                logoutBtn.setVisibility(View.VISIBLE);
+                                                loginBtn.setVisibility(View.GONE);
+                                                signupBtn.setVisibility(View.GONE);
+                                                startActivity(new Intent(getBaseContext(),RequestsActivity.class));
+                                            }else{
+                                                Toast.makeText(MainActivity.this,"You're in the wrong app", Toast.LENGTH_SHORT).show();
+                                                mAuth.signOut();
+                                            }
+                                        }
+                                        @Override
+                                        public void onCancelled(DatabaseError databaseError) {
+
+                                        }
+                                    });
+
                                 }
                             }
                         });
