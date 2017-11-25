@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnFailureListener;
@@ -39,6 +40,7 @@ public class RequestsActivity extends AppCompatActivity {
 
     Button addBtn, clearBtn;
     EditText nameEt, descEt;
+    TextView requestTV;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,6 +56,7 @@ public class RequestsActivity extends AppCompatActivity {
         clearBtn = (Button) findViewById(R.id.clear_btn);
         nameEt = (EditText) findViewById(R.id.req_nameET);
         descEt = (EditText) findViewById(R.id.req_descET);
+        requestTV = (TextView) findViewById(R.id.requestTV);
 
         clearBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -139,6 +142,7 @@ public class RequestsActivity extends AppCompatActivity {
     }
 
     private void SetContents(List<RequestList> reqList, RecyclerView req_recycle) {
+        requestTV = (TextView) findViewById(R.id.requestTV);
         if(!reqList.isEmpty()){
             adapter = new RequestAdapter(reqList, getBaseContext(), new OnItemClick() {
                 @Override
@@ -148,6 +152,9 @@ public class RequestsActivity extends AppCompatActivity {
             });
             req_recycle.setAdapter(adapter);
             req_recycle.setLayoutManager(new LinearLayoutManager(getBaseContext(),LinearLayoutManager.VERTICAL,false));
+            requestTV.setText("Your Requests");
+        }else{
+            requestTV.setText("You Have No Requests");
         }
     }
 }

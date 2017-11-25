@@ -40,7 +40,12 @@ public class RequestAdapter extends RecyclerView.Adapter<RequestAdapter.myViewHo
     public void onBindViewHolder(myViewHolder holder, int position) {
         holder.name.setText(data.get(position).getReqName());
         holder.desc.setText(data.get(position).getReqDesc());
-        holder.email.setText(data.get(position).getReqEmail());
+
+        if(!data.get(position).getAcceptedBy().equals("None")){
+            holder.acceptedby.setText(data.get(position).getAcceptedBy());
+        }else{
+            holder.acceptedby.setText("Not Taken");
+        }
     }
 
     @Override
@@ -49,13 +54,13 @@ public class RequestAdapter extends RecyclerView.Adapter<RequestAdapter.myViewHo
     }
 
     public class myViewHolder extends RecyclerView.ViewHolder{
-        TextView name, desc, email;
+        TextView name, desc, acceptedby;
         public myViewHolder(View itemView) {
             super(itemView);
 
             name = itemView.findViewById(R.id.req_nameTV);
             desc = itemView.findViewById(R.id.req_descTV);
-            email = itemView.findViewById(R.id.req_emailTV);
+            acceptedby = itemView.findViewById(R.id.req_acceptedTV);
         }
     }
 }

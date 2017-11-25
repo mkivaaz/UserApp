@@ -56,9 +56,9 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:textColor="@android:color/white"
-                android:text="Email Address:"/>
+                android:text="Accepted By:"/>
             <TextView
-                android:id="@+id/req_emailTV"
+                android:id="@+id/req_acceptedTV"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:textColor="@android:color/white"
