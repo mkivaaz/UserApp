@@ -22,6 +22,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import kivaaz.com.request.UserType;
+
 public class MainActivity extends AppCompatActivity {
 
     private static final String TAG = ".MainActivity";
